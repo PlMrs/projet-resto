@@ -1,13 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { postPlaces } from "../api/Services";
+import { getTypes, postPlaces } from "../api/Services";
+import RNPickerSelect from 'react-native-picker-select';
 
 export default function AddPlace({gone, getPlcs} : any){
 
     const [title, setTitle] = useState("");
 
     const [comment, setComment] = useState("");
+
+    const [types,setTypes] = useState([])
+
+    const [type,setType] = useState()
 
     const [address, setAddress] : any = useState({
         label : "",
@@ -55,9 +60,27 @@ export default function AddPlace({gone, getPlcs} : any){
 
     }
 
+    const getTpes = async ()=>{
+
+        const {data} = await getTypes()
+        
+        let res : any = []
+
+        data.forEach((e : any) => {
+            res.push({label : e.attributes.name, value : e.id})
+        });
+
+        setTypes(res)
+        
+    }
+
     useEffect(()=>{
         getAddresses()
     },[address])
+
+    useEffect(()=>{
+        getTpes()
+    },[])
 
     async function sendPlace(){
         const data = {
@@ -69,7 +92,7 @@ export default function AddPlace({gone, getPlcs} : any){
                 "gone": gone ? true : false ,
                 "users_permissions_user" : null,
                 "comment" : comment,
-                "type" : 1
+                "type" : type
             }
         }
 
@@ -119,6 +142,11 @@ export default function AddPlace({gone, getPlcs} : any){
                 onChangeText={setComment}
                 value={comment} 
                 placeholder="Commentaire"
+            />
+
+            <RNPickerSelect
+                onValueChange={(value)=>{setType(value)}}
+                items={types}
             />
 
             <Pressable style={styles.submitButtonContainer} onPress={sendPlace}>

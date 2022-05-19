@@ -1,6 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { getPlaces, removeList } from "../../api/Services";
@@ -64,7 +61,7 @@ export default function AlreadyEat(){
 
     return(
         <View style={{flex:1}}>
-            <Text style={styles.title}>Vos restaurants : </Text>
+            <Text style={styles.title}>J'y suis allé : </Text>
 
             <TextInput  
                 style={styles.inputs}
