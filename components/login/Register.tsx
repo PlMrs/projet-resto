@@ -37,7 +37,7 @@ export default function Register(){
     }
 
     return(
-        <View>
+        <View style={styles.container}>
             <TextInput 
                 style={styles.inputs}
                 onChangeText={setSubUsername}
@@ -64,6 +64,22 @@ export default function Register(){
 }
 
 export const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+        padding: 30,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     inputs : {
         margin: 10,
         padding:10

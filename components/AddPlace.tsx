@@ -111,7 +111,7 @@ export default function AddPlace({gone, getPlcs} : any){
 
 
     return(
-        <View style={{flex:1}}>
+        <View style={{flex:1, justifyContent: 'center'}}>
             <Text>Ajouter un endroit</Text>
 
             <TextInput 
@@ -158,7 +158,8 @@ export default function AddPlace({gone, getPlcs} : any){
 
 export const styles = StyleSheet.create({
     inputs: {
-        
+        marginTop: 5,
+        marginBottom: 5
     },
     addressesInputs : {
         padding:10

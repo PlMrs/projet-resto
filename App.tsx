@@ -45,7 +45,7 @@ export default function App() {
     <NavigationContainer>
       <Authcontext.Provider value={{isSignedIn, setSignIn}}>
         <UserContext.Provider value={{user, setUser}}>
-            <Stack.Navigator screenOptions={{ headerShown:false}}>
+            <Stack.Navigator screenOptions={{ headerShown:false,  animation: 'none'}}>
               { isSignedIn ? (
               <>
               <Stack.Screen name="userDashboard" component={Dashboard}  />

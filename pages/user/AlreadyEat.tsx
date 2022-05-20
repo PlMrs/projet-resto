@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import RNModal from "react-native-modal";
 import { getPlaces, removeList } from "../../api/Services";
 import AddPlace from "../../components/AddPlace";
+import { style } from "../../components/Header";
 import { restaus } from "../../interfaces/restau";
+import { styles } from "../../styles/searchPages";
 
 export default function AlreadyEat(){
 
@@ -12,6 +15,8 @@ export default function AlreadyEat(){
     const [changed, setChanged] = useState(false)
 
     const [search,setSearch] = useState("")
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const updateList = (e : string)=>{
 
@@ -60,26 +65,29 @@ export default function AlreadyEat(){
     },[changed])
 
     return(
-        <View style={{flex:1}}>
-            <Text style={styles.title}>J'y suis allé : </Text>
+        <View style={{flex:1, width: '100%', alignItems: 'center'}}>
 
-            <TextInput  
-                style={styles.inputs}
-                onChangeText={e=> updateList(e)}
-                value={search} 
-                placeholder="Rechercher"
-            />
+            <View style={{width: '100%'}}>
+                <TextInput  
+                    style={styles.inputs}
+                    onChangeText={e=> updateList(e)}
+                    value={search} 
+                    placeholder="Rechercher"
+                />
+            </View>
             <FlatList
                 style={{flex:1}}
                 data={places}
                 renderItem={({item} : any )=>{
                   return(  
                   <View style={styles.listContainer}>
-                        <Text>Nom du restaurant : {item.attributes.title}</Text>
-                        <Text>Adresse : {item.attributes.address}</Text>
-                        <Text>Type: {item.attributes?.type?.data?.attributes.name} </Text>
-                       <Pressable onPress={()=> rmList(item.id)}>
-                            <Text>X</Text>
+                        <Text style={styles.listTitle}>{item.attributes.title}</Text>
+                        <View style={styles.listDesc}>
+                            <Text style={styles.listType}>{item.attributes?.type?.data?.attributes.name} </Text>
+                            <Text style={styles.listAddress}>{item.attributes.address}</Text>
+                        </View>
+                       <Pressable onPress={()=> rmList(item.id)} style={styles.delButton}>
+                           <Image style={styles.delButtonImg} source={require('../../assets/remove.png')}/>
                        </Pressable>
                   </View>    
                   )
@@ -87,23 +95,30 @@ export default function AlreadyEat(){
                 }
             />
 
-            <AddPlace gone={true} getPlcs={getPlcs}/>
+            {/*<AddPlace gone={true} getPlcs={getPlcs}/>*/}
+            
+            <RNModal
+            isVisible={modalVisible}
+            animationInTiming={100}
+            animationOutTiming={100}
+            backdropTransitionInTiming={80}
+            backdropTransitionOutTiming={80}
+            style={{alignItems: 'center'}}
+            >
+            <View style={{backgroundColor:'white', width: '80%', height: '50%', borderRadius: 10, alignItems:'center'}}>
+                <Pressable onPress={() => setModalVisible(false)} style={{position:'absolute', right:10, top: 10}}>
+                    <View style={{alignItems: 'flex-end', justifyContent: 'flex-end',}}>
+                        <Image style={{width:20,height:20}} source={require('../../assets/close.png')} />
+                    </View>
+                </Pressable>
+                    <AddPlace gone={true} getPlcs={getPlcs}/>
+                </View>
+            </RNModal>
+            <Pressable onPress={() => setModalVisible(true)}>
+                <View style={{backgroundColor:'#4C6EAF', width: 50, height: 50, borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text>+</Text>
+                </View>
+            </Pressable>
         </View>
     )
 }
-
-export const styles = StyleSheet.create({
-    listContainer: {
-        marginTop: 20,
-        marginBottm: 20
-    },
-    title: {
-        textAlign: 'center',
-        marginTop: 20,
-        fontSize: 20,
-        fontWeight:'bold'
-    },
-    inputs :{
-
-    }
-})

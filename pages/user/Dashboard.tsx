@@ -1,10 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 import { Authcontext } from "../../context/AuthContext";
+import AlreadyEat from "./AlreadyEat";
+import WantToEat from "./WantToEat";
 
 export default function Dashboard(){
+
+    const [isVisited, setVisited] = useState(true)
 
     const {setSignIn} : any = useContext(Authcontext);
 
@@ -12,33 +18,11 @@ export default function Dashboard(){
 
     return(
         <View style={styles.container}>
-            <Text>Dashboard</Text>
+            <Header isVisited={isVisited} setVisited={setVisited} />
             <View style={styles.main}>
-                <View style={styles.buttonsContainer}>
-                    <Pressable onPress={()=> {
-                        AsyncStorage.removeItem('@user')
-                        setSignIn(false)
-                        navigation.navigate('Home')
-                        }}>
-                        <Text>Se déconnecter</Text>
-                    </Pressable>
-                    <Pressable onPress={()=>{
-                        navigation.navigate('AlreadyEat')
-                    }}>
-                        <Text>Où j'ai déja manger</Text>
-                    </Pressable>
-                    <Pressable onPress={()=>{
-                        navigation.navigate('WantToEat')
-                    }}>
-                        <Text>Où je veux manger</Text>
-                    </Pressable>
-                    <Pressable onPress={()=>{
-                        navigation.navigate('Map')
-                    }}>
-                        <Text>Map</Text>
-                    </Pressable>
-                </View>
+                {isVisited ? <AlreadyEat/> : <WantToEat />}
             </View>
+            <Footer />
         </View>
     )
 }
@@ -46,6 +30,8 @@ export default function Dashboard(){
 export const styles = StyleSheet.create({
     container:{
         flex:1,
+        backgroundColor: '#322F4A',
+        color: 'white'
     },
     main:{
         flex:1,

@@ -17,10 +17,10 @@ export default function Login(){
                 <Register />
              </View>
 
-            <View style={!loginView ? {display:'none'} : null}>
+            <View style={[!loginView ? {display:'none'} : null,styles.message]}>
                 <Text>Vous n'avez pas de compte ? <Pressable onPress={()=> isLoginView(!loginView)}><Text>Inscrivez vous!</Text></Pressable></Text>
             </View>
-            <View style={loginView ? {display:'none'} : null}>
+            <View style={[loginView ? {display:'none'} : null,styles.message]}>
                 <Text>Déjà un compte ? <Pressable onPress={()=> isLoginView(!loginView)}><Text>Connectez vous!</Text></Pressable></Text>
             </View>
         </View>
@@ -37,5 +37,10 @@ export const styles = StyleSheet.create({
     inputs : {
         margin: 10,
         padding:10
+    },
+    message : {
+        marginTop: 30,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

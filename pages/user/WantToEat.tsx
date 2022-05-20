@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { getPlaces, removeList } from "../../api/Services";
 import AddPlace from "../../components/AddPlace";
+import { restaus } from "../../interfaces/restau";
+import { styles } from "../../styles/searchPages";
 
 export default function WantToEat(){
 
     const [places,setPlaces] = useState([])
+
+    const [defaultPlaces,setDefaultPlaces] = useState([])
+
+    const [search,setSearch] = useState("")
+
+    const updateList = (e : string)=>{
+
+       setSearch(e)
+
+       const filteredPlaces  = places.filter((place : restaus) =>{
+           
+            if(place.attributes?.address.includes(e) || place.attributes?.title.includes(e) ){
+                return true
+            }
+        })
+        e === "" ? setPlaces(defaultPlaces) : setPlaces(filteredPlaces)
+    }
 
     async function getPlcs(){
     
@@ -34,19 +53,28 @@ export default function WantToEat(){
     },[])
 
     return(
-        <View style={{flex:1}}>
-            <Text style={styles.title}>J'aimerais y aller : </Text>
+        <View style={{flex:1,width: '100%', alignItems: 'center'}}>
+            <View style={{width: '100%'}}>
+                <TextInput  
+                    style={styles.inputs}
+                    onChangeText={e=> updateList(e)}
+                    value={search} 
+                    placeholder="Rechercher"
+                />
+            </View>
             <FlatList
                 data={places}
                 renderItem={({item} : any)=>
-                    <View style={styles.listContainer}>
-                        <Text>Nom du restaurant : {item.attributes.title}</Text>
-                        <Text>Adresse : {item.attributes.address}</Text>
-                        <Text>Type: {item.attributes.type.data.attributes.name} </Text>
-                        <Pressable onPress={()=> rmList(item.id)}>
-                            <Text>X</Text>
-                       </Pressable>
-                    </View>    
+                <View style={styles.listContainer}>
+                    <Text style={styles.listTitle}>{item.attributes.title}</Text>
+                    <View style={styles.listDesc}>
+                        <Text style={styles.listType}>{item.attributes?.type?.data?.attributes.name} </Text>
+                        <Text style={styles.listAddress}>{item.attributes.address}</Text>
+                    </View>
+                    <Pressable onPress={()=> rmList(item.id)}>
+                        <Text>X</Text>
+                    </Pressable>
+                 </View>    
                 }
             />
 
@@ -54,16 +82,3 @@ export default function WantToEat(){
         </View>
     )
 }
-
-export const styles = StyleSheet.create({
-    listContainer: {
-        marginTop: 20,
-        marginBottm: 20
-    },
-    title: {
-        textAlign: 'center',
-        marginTop: 20,
-        fontSize: 20,
-        fontWeight:'bold'
-    }
-})

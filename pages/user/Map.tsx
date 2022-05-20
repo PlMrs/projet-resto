@@ -5,6 +5,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { getJwt, getPlaces, getTypes } from "../../api/Services";
 import { restaus } from "../../interfaces/restau";
 import RNPickerSelect from 'react-native-picker-select';
+import Footer from "../../components/Footer";
 
 
 export default function UserMap(){
@@ -125,6 +126,7 @@ export default function UserMap(){
                         />
                     ))}
             </MapView>
+            <Footer />
         </View>
     )
 }
